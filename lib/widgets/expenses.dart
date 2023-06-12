@@ -33,8 +33,18 @@ class _ExpensesState extends State<Expenses> {
   @override
   Widget build(context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Akiba Expense Trucker', style: TextStyle(color: Color.fromARGB(255, 127, 226, 132), fontWeight: FontWeight.bold),),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
       body: Column(
         children: [
+          // Add ToolBar with Add button
           const Text('The Chart'),
           Expanded(
             child: ExpensesList(_registeredExpenses),
