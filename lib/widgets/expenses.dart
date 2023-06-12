@@ -1,6 +1,7 @@
-import 'package:expense_trucker/widgets/expenses_list/expenses_list.dart';
-import 'package:expense_trucker/models/expense.dart';
 import 'package:flutter/material.dart';
+import 'package:expense_trucker/models/expense.dart';
+import 'package:expense_trucker/widgets/new_expense.dart';
+import 'package:expense_trucker/widgets/expenses_list/expenses_list.dart';
 
 class Expenses extends StatefulWidget {
   const Expenses({super.key});
@@ -27,17 +28,30 @@ class _ExpensesState extends State<Expenses> {
         title: 'Mombasa Travel',
         amount: 123.95,
         category: Categories.transport,
-        date: DateTime.now())
+        date: DateTime.now()
+    )
   ];
+
+  void _openAddExpenseOverlay() {
+      showModalBottomSheet(
+        context: context,
+        builder: (ctx) => const NewExpense(),
+      );
+  }
 
   @override
   Widget build(context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Akiba Expense Trucker', style: TextStyle(color: Color.fromARGB(255, 127, 226, 132), fontWeight: FontWeight.bold),),
+        title: const Text(
+          'Akiba Expense Trucker',
+          style: TextStyle(
+              color: Color.fromARGB(255, 127, 226, 132),
+              fontWeight: FontWeight.bold),
+        ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: _openAddExpenseOverlay,
             icon: const Icon(Icons.add),
           ),
         ],
