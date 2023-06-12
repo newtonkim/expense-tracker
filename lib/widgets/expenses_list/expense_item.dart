@@ -21,7 +21,6 @@ class ExpenseItem extends StatelessWidget {
                 const Spacer(),
                 Row(
                   children: [
-                    // add icon dynamically from the expense
                     Icon(categoryIcons[expense.category]),
                     const SizedBox(
                       width: 8,
