@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:expense_trucker/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
@@ -13,6 +14,7 @@ class _NewExpense extends State<NewExpense> {
 // use text editing controller to handle and store user input
   final _titleInputController = TextEditingController();
   final _amountInputController = TextEditingController();
+  DateTime? _selectedDate;
 
 // call this method to destroy any user input after storage
   @override
@@ -22,11 +24,18 @@ class _NewExpense extends State<NewExpense> {
     super.dispose();
   }
 
-  void presentDatePicker() {
+  void presentDatePicker() async {
     final now = DateTime.now();
-    final firstDate = DateTime(now.year -1, now.month, now.day);
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
     final lastDate = now;
-      showDatePicker(context: context, initialDate: now, firstDate: firstDate, lastDate: lastDate);
+    final pickedDate = await showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: firstDate,
+        lastDate: lastDate);
+    setState(() {
+      _selectedDate = pickedDate;
+    });
   }
 
   @override
@@ -60,7 +69,12 @@ class _NewExpense extends State<NewExpense> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text('Selected Date'),
+                    //use a ternary to check if date is empty
+                    Text(
+                      _selectedDate == null
+                          ? 'No date selected'
+                          : formatter.format(_selectedDate!),
+                    ),
                     IconButton(
                       onPressed: presentDatePicker,
                       icon: const Icon(Icons.calendar_month),
