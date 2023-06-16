@@ -22,6 +22,13 @@ class _NewExpense extends State<NewExpense> {
     super.dispose();
   }
 
+  void presentDatePicker() {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year -1, now.month, now.day);
+    final lastDate = now;
+      showDatePicker(context: context, initialDate: now, firstDate: firstDate, lastDate: lastDate);
+  }
+
   @override
   Widget build(context) {
     return Padding(
@@ -35,26 +42,46 @@ class _NewExpense extends State<NewExpense> {
               label: Text('Title'),
             ),
           ),
-          TextField(
-            controller: _amountInputController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              prefixText: '\$',
-              label: Text('Amount'),
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _amountInputController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    prefixText: '\$',
+                    label: Text('Amount'),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Selected Date'),
+                    IconButton(
+                      onPressed: presentDatePicker,
+                      icon: const Icon(Icons.calendar_month),
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
           Row(
             children: [
               TextButton(
                 onPressed: () {
-                  
+                  Navigator.pop(context);
                 },
                 child: const Text('Cancel'),
               ),
               ElevatedButton(
                 onPressed: () {
                   print(_titleInputController.text);
-                   print(_amountInputController.text);
+                  print(_amountInputController.text);
                 },
                 child: const Text('Save Expense'),
               ),
