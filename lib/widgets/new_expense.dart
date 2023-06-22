@@ -52,6 +52,7 @@ class _NewExpense extends State<NewExpense> {
           category: _selectedCategory
       ),
     );
+    Navigator.pop(context);
   }
 
 // call this method to destroy any user input after storage
@@ -79,7 +80,7 @@ class _NewExpense extends State<NewExpense> {
   @override
   Widget build(context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
         children: [
           TextField(
