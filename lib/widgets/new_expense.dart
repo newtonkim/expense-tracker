@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:expense_trucker/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required this.onAddExpense});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<NewExpense> createState() {
@@ -17,14 +19,39 @@ class _NewExpense extends State<NewExpense> {
   DateTime? _selectedDate;
   Categories _selectedCategory = Categories.leisure;
 
-
   void submitExpenseData() {
     //convert a string amount to a double by using double.tryParse()
     final enteredAmount = double.tryParse(_amountInputController.text);
     final invalidAmount = enteredAmount == null || enteredAmount <= 0;
-    if(_titleInputController.text.trim().isEmpty || invalidAmount || _selectedDate == null){
-
+    if (_titleInputController.text.trim().isEmpty ||
+        invalidAmount ||
+        _selectedDate == null) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Invalid Input'),
+          content: const Text(
+              'Please make sure a valid title, amount, date and category was entered.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text('Okay'),
+            )
+          ],
+        ),
+      );
+      return;
     }
+    widget.onAddExpense(
+      Expense(
+          title: _titleInputController.text,
+          amount: enteredAmount,
+          date: _selectedDate!,
+          category: _selectedCategory
+      ),
+    );
   }
 
 // call this method to destroy any user input after storage
@@ -95,7 +122,9 @@ class _NewExpense extends State<NewExpense> {
               ),
             ],
           ),
-          const SizedBox(height: 16,),
+          const SizedBox(
+            height: 16,
+          ),
           Row(
             children: [
               DropdownButton(
