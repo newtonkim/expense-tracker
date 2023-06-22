@@ -28,36 +28,59 @@ class _ExpensesState extends State<Expenses> {
         title: 'Mombasa Travel',
         amount: 123.95,
         category: Categories.transport,
-        date: DateTime.now()
-    )
+        date: DateTime.now())
   ];
 
 // method of adding an expense
-  void _addExpenses(Expense expense){
+  void _addExpenses(Expense expense) {
     setState(() {
       _registeredExpenses.add(expense);
     });
   }
 
-
 // method for removing an expense
-void _removeExpense(Expense expense) {
-  setState(() {
-    _registeredExpenses.remove(expense);
-  });
-}
-
+  void _removeExpense(Expense expense) {
+    final expenseIndex = _registeredExpenses.indexOf(expense);
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: const Text('Expense Deleted'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(expenseIndex, expense);
+            });
+          },
+        ),
+      ),
+    );
+  }
 
   void _openAddExpenseOverlay() {
-      showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (ctx) => NewExpense(onAddExpense: _addExpenses),
-      );
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => NewExpense(onAddExpense: _addExpenses),
+    );
   }
 
   @override
   Widget build(context) {
+    Widget mainContent = const Center(
+      child: Text(
+        'No Expenses Found. Please add some!',
+        style: TextStyle(fontSize: 18),
+      ),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(_registeredExpenses, _removeExpense);
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -78,7 +101,7 @@ void _removeExpense(Expense expense) {
           // Add ToolBar with Add button
           const Text('The Chart'),
           Expanded(
-            child: ExpensesList(_registeredExpenses, _removeExpense),
+            child: mainContent,
           ),
         ],
       ),
