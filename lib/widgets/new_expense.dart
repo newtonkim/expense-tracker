@@ -15,6 +15,17 @@ class _NewExpense extends State<NewExpense> {
   final _titleInputController = TextEditingController();
   final _amountInputController = TextEditingController();
   DateTime? _selectedDate;
+  Categories _selectedCategory = Categories.leisure;
+
+
+  void submitExpenseData() {
+    //convert a string amount to a double by using double.tryParse()
+    final enteredAmount = double.tryParse(_amountInputController.text);
+    final invalidAmount = enteredAmount == null || enteredAmount <= 0;
+    if(_titleInputController.text.trim().isEmpty || invalidAmount || _selectedDate == null){
+
+    }
+  }
 
 // call this method to destroy any user input after storage
   @override
@@ -84,8 +95,31 @@ class _NewExpense extends State<NewExpense> {
               ),
             ],
           ),
+          const SizedBox(height: 16,),
           Row(
             children: [
+              DropdownButton(
+                  value:
+                      _selectedCategory, // allows the selected value to appear on the screen
+                  items: Categories.values
+                      .map(
+                        (category) => DropdownMenuItem(
+                          value: category,
+                          child: Text(
+                            category.name.toUpperCase(),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    if (value == null) {
+                      return;
+                    }
+                    setState(() {
+                      _selectedCategory = value;
+                    });
+                  }),
+              const Spacer(),
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -93,10 +127,7 @@ class _NewExpense extends State<NewExpense> {
                 child: const Text('Cancel'),
               ),
               ElevatedButton(
-                onPressed: () {
-                  print(_titleInputController.text);
-                  print(_amountInputController.text);
-                },
+                onPressed: submitExpenseData,
                 child: const Text('Save Expense'),
               ),
             ],
