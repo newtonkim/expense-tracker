@@ -41,11 +41,16 @@ class ExpenseBucket {
       
     const ExpenseBucket(
       {
-        // named arguments in the constructor
         required this.category, 
         required this.expenses
       }
     );
+
+    // Alternative constructor for filtering expenses belonging to a specific category
+    ExpenseBucket.forCategory(List<Expense> allExpenses, this.category) 
+    : expenses = allExpenses.where(
+        (expense) => expense.category == category
+      ).toList();
 
      final Categories category;
      final List<Expense> expenses;
