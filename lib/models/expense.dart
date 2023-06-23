@@ -34,8 +34,32 @@ class Expense {
   //use getters
   get formattedDate {
     return formatter.format(date);
-
   }
 }
+// the dashboard class
+class ExpenseBucket {
+      
+    const ExpenseBucket(
+      {
+        // named arguments in the constructor
+        required this.category, 
+        required this.expenses
+      }
+    );
+
+     final Categories category;
+     final List<Expense> expenses;
+
+     double get totalExpenses {
+        double sum = 0;
+
+      // looping through the expenses 
+      for(final expense in expenses ){
+          // sum = sum  + expense.amount;
+          sum += expense.amount;
+      }
+        return sum;
+     }
+  }
 
 
