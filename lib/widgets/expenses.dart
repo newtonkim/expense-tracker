@@ -1,3 +1,4 @@
+import 'package:expense_trucker/widgets/chart/chart.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_trucker/models/expense.dart';
 import 'package:expense_trucker/widgets/new_expense.dart';
@@ -99,7 +100,7 @@ class _ExpensesState extends State<Expenses> {
       body: Column(
         children: [
           // Add ToolBar with Add button
-          const Text('The Chart'),
+          Chart(expenses: _registeredExpenses),
           Expanded(
             child: mainContent,
           ),
