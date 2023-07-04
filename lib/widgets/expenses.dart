@@ -85,6 +85,7 @@ class _ExpensesState extends State<Expenses> {
     if (_registeredExpenses.isNotEmpty) {
       mainContent = ExpensesList(_registeredExpenses, _removeExpense);
     }
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text(
