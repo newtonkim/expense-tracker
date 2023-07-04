@@ -125,45 +125,10 @@ class _NewExpense extends State<NewExpense> {
                       label: Text('Title'),
                     ),
                   ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _amountInputController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          prefixText: '\$',
-                          label: Text('Amount'),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          //use a ternary to check if date is empty
-                          Text(
-                            _selectedDate == null
-                                ? 'No date selected'
-                                : formatter.format(_selectedDate!),
-                          ),
-                          IconButton(
-                            onPressed: presentDatePicker,
-                            icon: const Icon(Icons.calendar_month),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Row(
-                  children: [
-                    DropdownButton(
+                if (width >= 600)
+                  Row(
+                    children: [
+                       DropdownButton(
                         value:
                             _selectedCategory, // allows the selected value to appear on the screen
                         items: Categories.values
@@ -183,7 +148,105 @@ class _NewExpense extends State<NewExpense> {
                           setState(() {
                             _selectedCategory = value;
                           });
-                        }),
+                        },
+                      ),
+                      const SizedBox(width: 24,),
+                        Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            //use a ternary to check if date is empty
+                            Text(
+                              _selectedDate == null
+                                  ? 'No date selected'
+                                  : formatter.format(_selectedDate!),
+                            ),
+                            IconButton(
+                              onPressed: presentDatePicker,
+                              icon: const Icon(Icons.calendar_month),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _amountInputController,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            prefixText: '\$',
+                            label: Text('Amount'),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            //use a ternary to check if date is empty
+                            Text(
+                              _selectedDate == null
+                                  ? 'No date selected'
+                                  : formatter.format(_selectedDate!),
+                            ),
+                            IconButton(
+                              onPressed: presentDatePicker,
+                              icon: const Icon(Icons.calendar_month),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                const SizedBox(
+                  height: 16,
+                ),
+                 if (width >= 600)
+                    Row(children: [
+                        const Spacer(),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    ElevatedButton(
+                      onPressed: submitExpenseData,
+                      child: const Text('Save Expense'),
+                    ),
+                    ],)
+                 else
+                Row(
+                  children: [
+                    DropdownButton(
+                      value:
+                          _selectedCategory, // allows the selected value to appear on the screen
+                      items: Categories.values
+                          .map(
+                            (category) => DropdownMenuItem(
+                              value: category,
+                              child: Text(
+                                category.name.toUpperCase(),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        if (value == null) {
+                          return;
+                        }
+                        setState(() {
+                          _selectedCategory = value;
+                        });
+                      },
+                    ),
                     const Spacer(),
                     TextButton(
                       onPressed: () {
