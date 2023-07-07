@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_trucker/models/expense.dart';
 import 'package:flutter/rendering.dart';
@@ -20,14 +23,26 @@ class _NewExpense extends State<NewExpense> {
   DateTime? _selectedDate;
   Categories _selectedCategory = Categories.leisure;
 
-  void submitExpenseData() {
-    //convert a string amount to a double by using double.tryParse()
-    final enteredAmount = double.tryParse(_amountInputController.text);
-    final invalidAmount = enteredAmount == null || enteredAmount <= 0;
-    if (_titleInputController.text.trim().isEmpty ||
-        invalidAmount ||
-        _selectedDate == null) {
-      showDialog(
+  void showPlatformDialog() {
+    if (Platform.isIOS) {
+        showCupertinoDialog(
+        context: context,
+        builder: (ctx) => CupertinoAlertDialog(
+          title: const Text('Invalid Input'),
+          content: const Text(
+              'Please make sure a valid title, amount, date and category was entered.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text('Okay'),
+            )
+          ],
+        ),
+      );
+    } else {
+       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
           title: const Text('Invalid Input'),
@@ -43,7 +58,19 @@ class _NewExpense extends State<NewExpense> {
           ],
         ),
       );
-      return;
+    }
+    
+  }
+
+  void submitExpenseData() {
+    //convert a string amount to a double by using double.tryParse()
+    final enteredAmount = double.tryParse(_amountInputController.text);
+    final invalidAmount = enteredAmount == null || enteredAmount <= 0;
+    if (_titleInputController.text.trim().isEmpty ||
+        invalidAmount ||
+        _selectedDate == null) {
+          
+      return showPlatformDialog();
     }
     widget.onAddExpense(
       Expense(
